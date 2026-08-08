@@ -14,26 +14,43 @@ using it.
 
 ## Install
 
-**[⬇︎ Download the latest version](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg)**
-— then open the DMG and drag **2as w Laze2.app** into `/Applications`.
+Apple Silicon and Intel, macOS 13 or later.
 
-Apple Silicon and Intel, macOS 13 or later. Older versions are on the
-[Releases page](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases).
+> **Heads up:** this app is not signed by Apple, so macOS will show
+> **"Apple could not verify 2as w Laze2 is free of malware"** and refuse to
+> open it. That is expected for any app distributed outside the App Store
+> without a $99/year Apple Developer account. The install below clears it.
+>
+> **Do not double-click the app inside the DMG.** A mounted DMG is read-only,
+> so the fix cannot be applied there. Copy it out first.
 
-Then two one-time steps — **both are required**, and the app looks broken
-without them:
+### Easiest: one command
 
-### 1. Let macOS open it
-
-The app is **not signed or notarized**, so Gatekeeper will refuse to open it.
-Clear the quarantine flag:
+Paste this into Terminal. It downloads, installs, unblocks, and launches:
 
 ```bash
-xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
+curl -fL -o /tmp/laze2.dmg https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg && hdiutil attach -quiet /tmp/laze2.dmg && ditto "/Volumes/2as w Laze2/2as w Laze2.app" "/Applications/2as w Laze2.app" && hdiutil detach -quiet "/Volumes/2as w Laze2" && xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app" && open "/Applications/2as w Laze2.app"
 ```
 
-The GUI alternative is System Settings → Privacy & Security → **Open Anyway**,
-after the first launch attempt is blocked.
+### Or by hand
+
+1. **[Download the DMG](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg)**
+   and open it.
+2. Drag **2as w Laze2.app** into your **Applications** folder. *(Don't open it
+   from the DMG — it will be blocked.)*
+3. Remove the quarantine flag, which is what makes macOS trust it:
+
+   ```bash
+   xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
+   ```
+
+4. Open it from Applications.
+
+If you skip step 3, the GUI fallback is System Settings → Privacy & Security →
+**Open Anyway**, after a blocked launch attempt.
+
+Older versions live on the
+[Releases page](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases).
 
 ### 2. Accessibility permission
 
