@@ -41,9 +41,17 @@ jobs:
             -ov -format UDZO \
             "2as-w-Laze2-${GITHUB_REF_NAME}.dmg"
 
+          # A second copy under a fixed name. GitHub's permanent
+          # /releases/latest/download/<file> URL matches on the exact filename,
+          # so the versioned one alone would break the README link on every
+          # release. Versioned copy stays for anyone archiving a specific build.
+          cp "2as-w-Laze2-${GITHUB_REF_NAME}.dmg" "2as-w-Laze2.dmg"
+
       - uses: softprops/action-gh-release@v2
         with:
-          files: 2as-w-Laze2-*.dmg
+          files: |
+            2as-w-Laze2-*.dmg
+            2as-w-Laze2.dmg
           body: |
             Drag **2as w Laze2.app** into `/Applications`.
 

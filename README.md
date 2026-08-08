@@ -8,10 +8,22 @@ press **Enter**, and the item is pasted straight into whatever app you were in.
 It lives in the menu bar, has no Dock icon, and does nothing while you are not
 using it.
 
+[![Download](https://img.shields.io/badge/Download-.dmg-E5682B?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg)
+[![Latest release](https://img.shields.io/github/v/release/ahmedabdelfattah7/2as-w-laz2?style=for-the-badge&color=F9C94F)](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest)
+[![License](https://img.shields.io/badge/License-MIT-555?style=for-the-badge)](LICENSE)
+
 ## Install
 
-Download the DMG from [Releases](../../releases) and drag **2as w Laze2.app** into
-`/Applications`.
+**[⬇︎ Download the latest version](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg)**
+— then open the DMG and drag **2as w Laze2.app** into `/Applications`.
+
+Apple Silicon and Intel, macOS 13 or later. Older versions are on the
+[Releases page](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases).
+
+Then two one-time steps — **both are required**, and the app looks broken
+without them:
+
+### 1. Let macOS open it
 
 The app is **not signed or notarized**, so Gatekeeper will refuse to open it.
 Clear the quarantine flag:
@@ -23,7 +35,7 @@ xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
 The GUI alternative is System Settings → Privacy & Security → **Open Anyway**,
 after the first launch attempt is blocked.
 
-### Accessibility permission
+### 2. Accessibility permission
 
 Auto-paste synthesises a ⌘V keystroke, which macOS only allows with the
 Accessibility permission. The app asks on first launch; you can also grant it
