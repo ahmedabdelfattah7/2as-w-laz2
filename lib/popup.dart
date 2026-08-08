@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'clipboard.dart';
 
-/// Fixed row height, which makes keeping the selection on screen a subtraction
-/// rather than a layout query.
+/// Toul kol saf sabet, w da beykhalli 7esab makan el selection tar7 basit
+/// badal ma nes2al el layout 3an el arqam.
 const _rowHeight = 34.0;
 
 class Popup extends ConsumerStatefulWidget {
@@ -39,8 +39,8 @@ class _PopupState extends ConsumerState<Popup> {
     super.dispose();
   }
 
-  /// Every time the panel is summoned it starts from a clean slate; every time
-  /// it is dismissed the contents are torn down so nothing is left animating.
+  /// Kol marra el panel yeftah beyebda2 min el awwil, w kol marra ye2fel
+  /// bene-sheel kol 7aga gowah 3ashan mayefdalsh fih 7aga bete-animate.
   void _setPanelVisible(bool visible) {
     if (visible) {
       _query.clear();
@@ -50,8 +50,9 @@ class _PopupState extends ConsumerState<Popup> {
     setState(() => _panelVisible = visible);
   }
 
-  /// Handled on the text field's own focus node so these keys are intercepted
-  /// before the default text-editing shortcuts consume the arrows.
+  /// E7na masikeen el azrar 3ala el focus node bta3 el text field nafso,
+  /// 3ashan nemsek el arrows 2abl ma el text field yakhodhom w ye7arrak
+  /// el cursor beehom.
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
       return KeyEventResult.ignored;
@@ -67,6 +68,7 @@ class _PopupState extends ConsumerState<Popup> {
     } else if (key == LogicalKeyboardKey.escape) {
       hidePanel();
     } else {
+      // Ay zorar tani seebo yekammel 3ady lel text field.
       return KeyEventResult.ignored;
     }
     return KeyEventResult.handled;
@@ -93,8 +95,8 @@ class _PopupState extends ConsumerState<Popup> {
     } else if (bottom > offset + viewport) {
       target = bottom - viewport;
     }
-    // jumpTo rather than animateTo: an animation would schedule frames every
-    // tick for no real benefit on a list this small.
+    // `jumpTo` mesh `animateTo`: el animation hatetlob frame kol tick min gher
+    // fayda 7a2i2eya fe list soghayara zay di.
     if (target != null) {
       _scroll.jumpTo(target.clamp(0.0, _scroll.position.maxScrollExtent));
     }
@@ -107,9 +109,9 @@ class _PopupState extends ConsumerState<Popup> {
 
   @override
   Widget build(BuildContext context) {
-    // Nothing is built while the panel is hidden. No text field means no
-    // blinking cursor, which means no scheduled frames and no idle CPU — and
-    // history arriving in the background does not rebuild anything either.
+    // Lama el panel yekoon ma5fi mafeesh 7aga betetbena2 khales. Mafeesh text
+    // field ya3ni mafeesh cursor beye-blink, ya3ni mafeesh frames wala CPU —
+    // w kaman el 7agat el gedida elly betetnasa5 mesh bete3mel rebuild lay 7aga.
     if (!_panelVisible) return const SizedBox.shrink();
 
     final history = ref.watch(historyProvider);
@@ -148,9 +150,9 @@ class _PopupState extends ConsumerState<Popup> {
       placeholderStyle: TextStyle(color: theme.secondary, fontSize: 14),
       style: TextStyle(color: theme.primary, fontSize: 14),
       cursorColor: theme.accent,
-      // Cupertino fades the cursor in and out by default, which is a
-      // continuous animation and so schedules a frame every vsync for as long
-      // as the panel is open. A plain blink is a repaint twice a second.
+      // Cupertino be-default bey-fade el cursor fe w barra, w di animation
+      // mostamerra ya3ni frame kol vsync tool ma el panel mafto7. El blink
+      // el 3ady da mogarrad repaint marritin fel sanya.
       cursorOpacityAnimates: false,
       decoration: const BoxDecoration(),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
@@ -175,28 +177,34 @@ class _PopupState extends ConsumerState<Popup> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       itemBuilder: (context, i) {
         final isSelected = i == _selected;
-        return GestureDetector(
-          onTap: () {
-            setState(() => _selected = i);
-            _accept();
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 6),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-              color: isSelected ? theme.accent : null,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Text(
-              // Newlines and runs of whitespace would break the single-line
-              // layout, so collapse them for display only.
-              _visible[i].replaceAll(RegExp(r'\s+'), ' ').trim(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 13,
-                color: isSelected ? const Color(0xFFFFFFFF) : theme.primary,
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            // El saf kollo yetdas 3aleh, mesh el kitaba bas. El test fe
+            // widget_test.dart beyethabbet min el nokta di.
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              setState(() => _selected = i);
+              _accept();
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                color: isSelected ? theme.accent : null,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                // El enter w el masafat el keteera hay-basto el saf, fa
+                // bene-lemhom fe satr wa7ed 3ashan el 3ard bas.
+                _visible[i].replaceAll(RegExp(r'\s+'), ' ').trim(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: isSelected ? const Color(0xFFFFFFFF) : theme.primary,
+                ),
               ),
             ),
           ),
@@ -206,8 +214,8 @@ class _PopupState extends ConsumerState<Popup> {
   }
 }
 
-/// A handful of colours for the two system appearances. Not worth a theming
-/// layer for a single screen.
+/// Shwayet alwan lel wad3 el fate7 w el ghame2. Mesh mestahel n3mel tabaqa
+/// kamla lel theming 3ashan shasha wa7da bas.
 class _Palette {
   const _Palette({
     required this.background,

@@ -1,10 +1,11 @@
 import Cocoa
 import FlutterMacOS
 
-/// The popup panel.
+/// El panel el soghayar elly beyeftah bel shortcut.
 ///
-/// Configured once at launch and then only ordered in and out, never closed, so
-/// the Flutter engine stays warm and summoning the panel is instant.
+/// Bene-zabbato marra wa7da fel bedaya, w ba3d keda bene-tal3o w nenazzelo bas,
+/// 3omro ma bye2fel — 3ashan el Flutter engine yefdal shaghal w el panel yeftah
+/// fel 7al.
 class MainFlutterWindow: NSWindow {
   static let panelSize = NSSize(width: 560, height: 360)
 
@@ -17,8 +18,9 @@ class MainFlutterWindow: NSWindow {
   }
 
   private func configureAsPanel() {
-    // .titled rather than .borderless: rounded corners, the window shadow, and
-    // the ability to become key all come for free instead of being overridden.
+    // E5tarna `.titled` mesh `.borderless`: kida el zawaya el medawwara w el
+    // dell w emkaneyet en el window teb2a key beygo ma3ana be balash badal ma
+    // ne3melhom kollohom be2edena.
     styleMask = [.titled, .fullSizeContentView]
     titlebarAppearsTransparent = true
     titleVisibility = .hidden
@@ -29,7 +31,7 @@ class MainFlutterWindow: NSWindow {
 
     level = .floating
     collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-    // Clicking anywhere else dismisses the panel. No global click monitor.
+    // Ay dosa barra el panel bet2felo. Min gher ma nektib wala satr zeyada.
     hidesOnDeactivate = true
     isReleasedWhenClosed = false
 
@@ -37,8 +39,8 @@ class MainFlutterWindow: NSWindow {
     orderOut(nil)
   }
 
-  /// Spotlight-style placement: horizontally centred on whichever screen holds
-  /// the pointer, a fifth of the way down.
+  /// Nafs fekret el Spotlight: fel nos min barra w khomus el shasha min fo2,
+  /// 3ala el shasha elly el mouse mawgood feeha.
   func positionOnActiveScreen() {
     let mouse = NSEvent.mouseLocation
     let screen = NSScreen.screens.first { $0.frame.contains(mouse) } ?? NSScreen.main

@@ -1,32 +1,32 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// The one channel shared with the macOS side.
+/// El channel el wa7eed elly beyrabetna bel gize2 el macOS.
 const _channel = MethodChannel('copy_paste/clipboard');
 
-/// Invoked when the native side shows or hides the panel.
+/// Betetnadi lama el nas el macOS yeftah aw ye2fel el panel.
 ///
-/// A plain callback rather than a provider: exactly one widget ever listens,
-/// and it is a transient signal rather than state anyone needs to read.
+/// Callback 3adi mesh provider: fih widget wa7ed bas beyesma3ha, w di eshara
+/// bete3addi mesh 7ala 7ad me7tag ye2raha.
 ///
-/// This matters for more than resetting the search box. While the panel is
-/// hidden the UI is torn down entirely, because a focused text field keeps its
-/// cursor blinking, and a blinking cursor keeps Flutter scheduling frames for a
-/// window nobody can see.
+/// W di mohimma le akhtar min mogarrad tafdeyet 5anet el ba7s: tool ma el
+/// panel ma5fi e7na bene-sheel el UI kolaha, 3ashan el text field lama yekoon
+/// masek el focus beyfdal 3ammal ye-blink, w el blink da beykhalli Flutter
+/// yetlob frames le window ma7addesh shayefha.
 void Function(bool visible)? onPanelVisibilityChanged;
 
-/// Puts [text] on the pasteboard, hides the panel, and pastes it into whatever
-/// app was frontmost before the panel opened.
+/// Bet7ott [text] 3ala el clipboard, te2fel el panel, w te3mel paste fel app
+/// elly kanet 2oddam 2abl ma el panel yeftah.
 Future<void> pasteItem(String text) =>
     _channel.invokeMethod<void>('paste', text);
 
-/// Hides the panel without pasting.
+/// Bet2fel el panel min gher paste.
 Future<void> hidePanel() => _channel.invokeMethod<void>('hide');
 
-/// The clipboard history: newest first, de-duplicated, capped.
+/// Tarikh el clipboard: el gedeed fel awwil, min gher tekrar, w be7add a2sa.
 ///
-/// This is the only shared state in the app, which is why it is the only
-/// provider. Search text and selection live in the widget that owns them.
+/// Di el 7ala el moshtaraka el wa7eda fel app, 3ashan keda heya el provider
+/// el wa7eed. El ba7s w el ekhteyar 3aysheen gowa el widget elly bey-stakhdemhom.
 class ClipboardHistory extends Notifier<List<String>> {
   static const maxItems = 100;
 
@@ -50,8 +50,8 @@ class ClipboardHistory extends Notifier<List<String>> {
 
   void add(String text) {
     if (text.trim().isEmpty) return;
-    // Re-copying something already in the list moves it to the top rather than
-    // creating a second entry.
+    // Law nasakht 7aga mawgooda 2abl keda, betetla3 fo2 badal ma yeb2a fih
+    // nos5tin minha fel list.
     final next = <String>[text, ...state.where((e) => e != text)];
     state = next.length > maxItems ? next.sublist(0, maxItems) : next;
   }

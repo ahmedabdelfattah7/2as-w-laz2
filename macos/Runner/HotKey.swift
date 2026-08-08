@@ -1,15 +1,14 @@
 import Carbon.HIToolbox
 
-/// A thin wrapper over Carbon's `RegisterEventHotKey`.
+/// Ghelaf ba3eet 7awalin `RegisterEventHotKey` bta3 Carbon.
 ///
-/// This is still the only way to get a system-wide shortcut that does *not*
-/// require the Accessibility permission, so the hotkey works even before the
-/// user has granted anything. It is also genuinely event-driven: the kernel
-/// delivers the event, nothing is polled.
+/// Lessa di el tare2a el wa7eda 3ashan tegeeb shortcut sha8al 3ala mostawa el
+/// nizam kollo min gher ma te7tag Accessibility — ya3ni el shortcut beyeshtaghal
+/// 7atta 2abl ma el user yedeek ay ezn. W kaman howa event 7a2i2i: el kernel
+/// howa elly beyeb3atlak el 7adas, mafeesh 7aga bete-check fe halaqa.
 ///
-/// The API is long deprecated in the sense that Carbon is, but it remains
-/// functional and every alternative (a global NSEvent monitor, an event tap)
-/// costs an Accessibility grant for strictly less reliability.
+/// Carbon 2adeem aywa, bas lessa shaghal, w kol el badayel (global NSEvent
+/// monitor aw event tap) hatetkallefak ezn Accessibility mo2abel dama2 a2al.
 final class HotKey {
   private var hotKeyRef: EventHotKeyRef?
   private var eventHandler: EventHandlerRef?
@@ -22,8 +21,8 @@ final class HotKey {
       eventClass: OSType(kEventClassKeyboard),
       eventKind: UInt32(kEventHotKeyPressed))
 
-    // The C callback cannot capture context, so the instance is passed through
-    // userData instead.
+    // El callback bta3 el C mesh momken ye-shil ay context gowah, 3ashan keda
+    // bene3addi el object nafso min khilal userData.
     let context = Unmanaged.passUnretained(self).toOpaque()
     let installed = InstallEventHandler(
       GetApplicationEventTarget(),

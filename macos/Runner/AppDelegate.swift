@@ -15,14 +15,14 @@ class AppDelegate: FlutterAppDelegate {
     guard let window = mainFlutterWindow as? MainFlutterWindow,
       let controller = window.contentViewController as? FlutterViewController
     else {
-      NSLog("copy_paste: no Flutter window; nothing to attach to")
+      NSLog("copy_paste: mafeesh Flutter window nerbot 3aleha")
       return
     }
 
     bridge = ClipboardBridge(
       messenger: controller.engine.binaryMessenger, window: window)
 
-    // Starts hidden — the panel is summoned, not launched into.
+    // Beyebda2 ma5fi — el panel bene-nadeeh, mesh beyeftah lewa7do.
     window.orderOut(nil)
 
     setUpStatusItem()
@@ -34,19 +34,19 @@ class AppDelegate: FlutterAppDelegate {
       self?.bridge?.togglePanel()
     }
     if hotKey == nil {
-      NSLog("copy_paste: ⌘⇧V is already taken; use the menu bar item instead")
+      NSLog("copy_paste: ⌘⇧V ma7goz le 7ad tani; estakhdem el menu bar")
     }
 
     promptForAccessibilityIfNeeded()
   }
 
-  /// Hiding the panel must never quit a background utility.
+  /// E2fal el panel mayenfa3sh yeqfel app shaghala fel khalfeya.
   override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
     return false
   }
 
-  /// Opening an already-running background app from Finder otherwise appears
-  /// to do nothing at all, which reads as the app being broken.
+  /// Law fata7t app shaghala 5alas min el Finder, el 3ady enno mayeb2ash fih
+  /// ay rad fe3l — w da beyballagh el user en el app bazet.
   override func applicationShouldHandleReopen(
     _ sender: NSApplication, hasVisibleWindows flag: Bool
   ) -> Bool {
@@ -58,10 +58,10 @@ class AppDelegate: FlutterAppDelegate {
     return true
   }
 
-  // MARK: - Menu bar
+  // MARK: - El menu bar
 
-  /// With `LSUIElement` there is no Dock icon and no application menu, so
-  /// without this the app would have no way to be quit or discovered.
+  /// Ma3a `LSUIElement` mafeesh ayqona fel Dock wala menu lel app, fa min gher
+  /// el 7aga di el user mesh hayel2a tare2a ye2fel beeha el app aslan.
   private func setUpStatusItem() {
     let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     item.button?.image = NSImage(
@@ -86,6 +86,8 @@ class AppDelegate: FlutterAppDelegate {
 
   private func menuItem(_ title: String, _ action: Selector, key: String = "") -> NSMenuItem {
     let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
+    // Lazem ne7add el target be nafsena, 8er keda el menu hayedawwar fel
+    // responder chain w mesh haylae2 7ad yerod.
     item.target = self
     return item
   }
@@ -102,7 +104,7 @@ class AppDelegate: FlutterAppDelegate {
     NSApp.terminate(nil)
   }
 
-  // MARK: - Launch at login
+  // MARK: - El fat7 ma3a el tashgheel
 
   @objc private func toggleLaunchAtLogin() {
     do {
@@ -112,8 +114,9 @@ class AppDelegate: FlutterAppDelegate {
         try SMAppService.mainApp.register()
       }
     } catch {
-      // Unsigned builds run from a build directory are often refused here, and
-      // a silently unchecked checkbox is worse than an explanation.
+      // El nosakh el 8er mowaqqa3a w el shaghala min folder el build kiteer
+      // beyetrafedo hena, w 3alama mesh betetzabbat min gher tafseer a7'las
+      // min en el user yefdal yesa2al.
       let alert = NSAlert()
       alert.messageText = "Couldn’t change the login item"
       alert.informativeText =
@@ -122,15 +125,15 @@ class AppDelegate: FlutterAppDelegate {
     }
   }
 
-  // MARK: - Permissions
+  // MARK: - El azoonat
 
-  /// Prompts on first launch. Auto-paste is a no-op without this, so it is
-  /// worth asking for up front rather than at the moment of failure.
+  /// Beyes2al awwil marra bas. El paste el otomatiki mayeshtaghalsh khales min
+  /// gher el ezn da, fa a7san nes2al min el bedaya mesh fe lah7zet el fashal.
   private func promptForAccessibilityIfNeeded() {
     let prompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
     let trusted = AXIsProcessTrustedWithOptions([prompt: true] as CFDictionary)
     if !trusted {
-      NSLog("copy_paste: waiting on Accessibility permission for auto-paste")
+      NSLog("copy_paste: mestanyeen ezn el Accessibility 3ashan el paste")
     }
   }
 }
@@ -138,7 +141,8 @@ class AppDelegate: FlutterAppDelegate {
 // MARK: - NSMenuDelegate
 
 extension AppDelegate: NSMenuDelegate {
-  /// Refreshed when the menu opens rather than on a timer.
+  /// Bene7addes el 3alama lama el menu yeftah, mesh 3ala sa3a bete-shtaghal
+  /// tool el wa2t.
   func menuWillOpen(_ menu: NSMenu) {
     launchAtLoginItem?.state = SMAppService.mainApp.status == .enabled ? .on : .off
   }

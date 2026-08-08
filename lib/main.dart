@@ -19,9 +19,9 @@ class _AppState extends ConsumerState<App> {
   @override
   void initState() {
     super.initState();
-    // Create the history eagerly so the native channel handler is installed at
-    // startup rather than on the first paint of the list — otherwise a copy
-    // made in the first moments after launch would be missed.
+    // Bene3mel el history min awwil lah7za 3ashan el handler bta3 el channel
+    // yetrakkeb ma3a bedayet el app, mesh awwil ma el list tetrasem — 8er keda
+    // ay nas5 ye7sal fe awwil lawa7i min el tashgheel kan hayedee3.
     ref.read(historyProvider);
   }
 
