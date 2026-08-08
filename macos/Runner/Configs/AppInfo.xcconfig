@@ -1,0 +1,10 @@
+// Application-level settings for the Runner target.
+
+// The application's name, and therefore the name of the built .app.
+PRODUCT_NAME = Clipboard
+
+// The application's bundle identifier.
+PRODUCT_BUNDLE_IDENTIFIER = com.ahmed.clipboard
+
+// The copyright displayed in application information
+PRODUCT_COPYRIGHT = Copyright © 2026 Ahmed. All rights reserved.

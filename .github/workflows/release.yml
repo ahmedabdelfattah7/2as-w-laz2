@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # pubspec.yaml is the single source of truth for the version. Catching a
+      # mismatch here beats shipping a DMG whose name disagrees with the app.
+      - name: Check the tag matches pubspec
+        run: |
+          version=$(grep '^version:' pubspec.yaml | sed 's/version: *//' | cut -d+ -f1)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match pubspec version $version" >&2
+            exit 1
+          fi
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter test
+
+      - run: flutter build macos --release
+
+      - name: Package as a DMG
+        run: |
+          hdiutil create \
+            -volname Clipboard \
+            -srcfolder build/macos/Build/Products/Release/Clipboard.app \
+            -ov -format UDZO \
+            "Clipboard-${GITHUB_REF_NAME}.dmg"
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: Clipboard-*.dmg
+          body: |
+            Drag **Clipboard.app** into `/Applications`.
+
+            This build is **not signed or notarized**, so macOS will refuse to
+            open it until you clear the quarantine flag:
+
+            ```
+            xattr -dr com.apple.quarantine /Applications/Clipboard.app
+            ```
+
+            On first launch, grant **Accessibility** in
+            System Settings → Privacy & Security → Accessibility. Without it the
+            app can read your clipboard but cannot paste for you.
+
+            Press **⌘⇧V** to open the panel.
