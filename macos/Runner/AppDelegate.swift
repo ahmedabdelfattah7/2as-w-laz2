@@ -12,6 +12,17 @@ class AppDelegate: FlutterAppDelegate {
   private var launchAtLoginItem: NSMenuItem?
 
   override func applicationDidFinishLaunching(_ notification: Notification) {
+    // Law fih nosha tanya min el app shaghala 5alas, e2fel nafsak w sahheeha.
+    //
+    // Min gher el 7etta di momken teb2a shaghal nos5tein — wa7da min folder
+    // el build w wa7da min /Applications — w saa3etha:
+    //   - wa7da bas heya elly hateakhod el ⌘⇧V (el tanya el tasgeel beta3ha
+    //     beye-fshal fe sokoot),
+    //   - w el ezn bta3 el Accessibility motrabet bel masar, ya3ni momken
+    //     te-eddi el ezn le wa7da w el tanya heya elly shaghala fe3lan.
+    // W keda te2rab teganen 3ashan kol 7aga shakloha mazbota.
+    if terminateIfAlreadyRunning() { return }
+
     guard let window = mainFlutterWindow as? MainFlutterWindow,
       let controller = window.contentViewController as? FlutterViewController
     else {
@@ -38,6 +49,19 @@ class AppDelegate: FlutterAppDelegate {
     }
 
     promptForAccessibilityIfNeeded()
+  }
+
+  private func terminateIfAlreadyRunning() -> Bool {
+    guard let bundleID = Bundle.main.bundleIdentifier else { return false }
+    let me = ProcessInfo.processInfo.processIdentifier
+    let others = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
+      .filter { $0.processIdentifier != me }
+    guard let existing = others.first else { return false }
+
+    NSLog("copy_paste: fih nosha shaghala 5alas (pid \(existing.processIdentifier)) — 2afel nafsi")
+    _ = existing.activate(options: [])
+    NSApp.terminate(nil)
+    return true
   }
 
   /// E2fal el panel mayenfa3sh yeqfel app shaghala fel khalfeya.
