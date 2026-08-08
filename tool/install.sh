@@ -17,8 +17,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-APP="build/macos/Build/Products/Release/Clipboard.app"
-DEST="/Applications/Clipboard.app"
+APP_NAME="2as w Laze2"
+APP="build/macos/Build/Products/Release/${APP_NAME}.app"
+DEST="/Applications/${APP_NAME}.app"
 
 # Momken te7add el certificate bta3ak keda:
 #   CLIPBOARD_SIGN_IDENTITY="Developer ID Application: ..." ./tool/install.sh
@@ -42,7 +43,7 @@ codesign --force --deep --sign "$IDENTITY" "$APP"
 codesign --verify --deep --strict "$APP"
 
 echo "==> Tanzeel fe $DEST"
-pkill -x Clipboard 2>/dev/null || true
+pkill -x "$APP_NAME" 2>/dev/null || true
 sleep 1
 rm -rf "$DEST"
 # `ditto` mesh `cp -R`: howa elly bey-na2el el bundle bel metadata bta3et el

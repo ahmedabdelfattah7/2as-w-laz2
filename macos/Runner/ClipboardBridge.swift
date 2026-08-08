@@ -248,7 +248,7 @@ final class ClipboardBridge {
     activateSelf()
 
     let alert = NSAlert()
-    alert.messageText = "Clipboard can’t paste for you yet"
+    alert.messageText = "2as w Laze2 can’t paste for you yet"
     alert.informativeText = """
       Pasting into other apps needs the Accessibility permission.
 

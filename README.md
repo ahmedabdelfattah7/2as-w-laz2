@@ -1,4 +1,6 @@
-# Clipboard
+# 2as w Laze2  (قص ولزق)
+
+*"Remembers it, so you don't."*
 
 A small macOS clipboard history utility. Press **⌘⇧V** anywhere, type to filter,
 press **Enter**, and the item is pasted straight into whatever app you were in.
@@ -8,14 +10,14 @@ using it.
 
 ## Install
 
-Download the DMG from [Releases](../../releases) and drag **Clipboard.app** into
+Download the DMG from [Releases](../../releases) and drag **2as w Laze2.app** into
 `/Applications`.
 
 The app is **not signed or notarized**, so Gatekeeper will refuse to open it.
 Clear the quarantine flag:
 
 ```bash
-xattr -dr com.apple.quarantine /Applications/Clipboard.app
+xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
 ```
 
 The GUI alternative is System Settings → Privacy & Security → **Open Anyway**,
@@ -60,7 +62,7 @@ Requires Flutter (stable) and Xcode.
 flutter build macos --release
 ```
 
-The result is `build/macos/Build/Products/Release/Clipboard.app`, a universal
+The result is `build/macos/Build/Products/Release/2as w Laze2.app`, a universal
 binary for both Apple Silicon and Intel.
 
 ### Working on it locally

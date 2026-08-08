@@ -1,5 +1,5 @@
 name: copy_paste
-description: "Minimal macOS clipboard history utility."
+description: "2as w Laze2 — minimal macOS clipboard history utility."
 publish_to: 'none'
 
 # Single source of truth for the version. Tag releases as v<version> (e.g. v1.0.0).

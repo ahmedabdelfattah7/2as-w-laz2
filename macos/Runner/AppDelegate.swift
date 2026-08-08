@@ -89,7 +89,7 @@ class AppDelegate: FlutterAppDelegate {
   private func setUpStatusItem() {
     let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     item.button?.image = NSImage(
-      systemSymbolName: "doc.on.clipboard", accessibilityDescription: "Clipboard")
+      systemSymbolName: "scissors", accessibilityDescription: "2as w Laze2")
 
     let menu = NSMenu()
     menu.delegate = self
@@ -102,7 +102,7 @@ class AppDelegate: FlutterAppDelegate {
     menu.addItem(launchItem)
 
     menu.addItem(.separator())
-    menu.addItem(menuItem("Quit Clipboard", #selector(quit), key: "q"))
+    menu.addItem(menuItem("Quit 2as w Laze2", #selector(quit), key: "q"))
 
     item.menu = menu
     statusItem = item

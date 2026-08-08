@@ -1,10 +1,12 @@
 // Application-level settings for the Runner target.
 
-// The application's name, and therefore the name of the built .app.
-PRODUCT_NAME = Clipboard
+// Esm el app zay ma beyban lel user — w esm el .app 3ala el disk.
+PRODUCT_NAME = 2as w Laze2
 
-// The application's bundle identifier.
+// El bundle id sabet 3amdan 3ala el esm el adeem: ezn el Accessibility
+// marboot beeh (identifier + certificate), fa taghyeeroh kan hayekhalli
+// el user yeddi el ezn tani min gher ay sabab.
 PRODUCT_BUNDLE_IDENTIFIER = com.ahmed.clipboard
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 Ahmed. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 Ahmed Abdelfattah. All rights reserved.
