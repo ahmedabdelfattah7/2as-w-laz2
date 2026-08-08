@@ -3,26 +3,6 @@ import Carbon.HIToolbox
 import Cocoa
 import FlutterMacOS
 
-/// Tasgeel mo2aqqat lel tashkhees fe /tmp/clipboard-debug.log.
-///
-/// Bene-ktib fe file 3ashan el NSLog lewa7do mesh dayman beyzhar fe `log show`,
-/// w e7na me7tageen nashoof el khatawat kolaha bel tarteeb. Da hayet-sheel
-/// ba3d ma nel2i el moshkela.
-func dlog(_ message: String) {
-  NSLog("copy_paste: \(message)")
-
-  let line = "\(Date()) \(message)\n"
-  guard let data = line.data(using: .utf8) else { return }
-  let url = URL(fileURLWithPath: "/tmp/clipboard-debug.log")
-  if let handle = try? FileHandle(forWritingTo: url) {
-    defer { try? handle.close() }
-    _ = try? handle.seekToEnd()
-    try? handle.write(contentsOf: data)
-  } else {
-    try? data.write(to: url)
-  }
-}
-
 /// Kol 7aga betlamis macOS mawgooda hena: motab3et el clipboard, eznhar w
 /// ekhfa2 el panel, w 3amal el paste nafso.
 ///
@@ -89,7 +69,6 @@ final class ClipboardBridge {
         app.bundleIdentifier != Bundle.main.bundleIdentifier
       else { return }
       self?.previousApp = app
-      dlog("did-activate: \(app.localizedName ?? "?")")
     }
 
     // `hidesOnDeactivate` bey2fel el panel min wara dahrena lama el user
@@ -98,7 +77,6 @@ final class ClipboardBridge {
       forName: NSApplication.didResignActiveNotification,
       object: nil, queue: .main
     ) { [weak self] _ in
-      dlog("didResignActive — window visible=\(self?.window?.isVisible ?? false)")
       self?.setPanelVisible(false)
     }
   }
@@ -147,8 +125,6 @@ final class ClipboardBridge {
 
     // Bene2ol lel Dart el awwil 3ashan yeb2a 5alas 3amel build lel list 2abl
     // ma el window teban 3ala el shasha.
-    dlog("showPanel — previousApp=\(previousApp?.localizedName ?? "nil") appHidden=\(NSApp.isHidden)")
-
     setPanelVisible(true)
     window.positionOnActiveScreen()
     // Ba3d `NSApp.hide` fe amaleyet el paste el app betfdal fe 7alet "hidden",
@@ -157,14 +133,6 @@ final class ClipboardBridge {
     activateSelf()
     window.makeKeyAndOrderFront(nil)
 
-    dlog("showPanel done — appActive=\(NSApp.isActive) visible=\(window.isVisible) key=\(window.isKeyWindow)")
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
-      guard let self, let window = self.window else { return }
-      dlog(
-        "0.4s later — appActive=\(NSApp.isActive) visible=\(window.isVisible) "
-          + "key=\(window.isKeyWindow) frontmost=\(NSWorkspace.shared.frontmostApplication?.localizedName ?? "?")"
-      )
-    }
   }
 
   func hidePanel() {
@@ -196,7 +164,6 @@ final class ClipboardBridge {
   /// El tarteeb hena mohim geddan. Law 3amaltoh ghalat el paste hayenzel fe
   /// app tanya, aw mesh hayenzel khales.
   private func paste(_ text: String) {
-    dlog("paste called — \(text.count) 7arf, AXTrusted=\(AXIsProcessTrusted())")
     // 1) 7ot el text 3ala el clipboard.
     pasteboard.clearContents()
     pasteboard.setString(text, forType: .string)
@@ -223,7 +190,7 @@ final class ClipboardBridge {
     }
 
     guard let target = previousApp else {
-      dlog("mafeesh previousApp — el text 3ala el clipboard bas")
+      NSLog("copy_paste: mafeesh previousApp — el text 3ala el clipboard bas")
       return
     }
 
@@ -246,8 +213,8 @@ final class ClipboardBridge {
     }
 
     let front = NSWorkspace.shared.frontmostApplication?.localizedName ?? "?"
-    dlog(
-      "⌘V -> \(target.localizedName ?? "?") | active=\(target.isActive) "
+    NSLog(
+      "copy_paste: ⌘V -> \(target.localizedName ?? "?") | active=\(target.isActive) "
         + "| frontmost=\(front) | mo7awlat=\(attempt)")
 
     // Shwayet wa2t kaman ba3d ma yeb2a active, 3ashan el text field gowah
@@ -274,7 +241,6 @@ final class ClipboardBridge {
     // beteshoofo 3ala 3aks el taps el tanya.
     down.post(tap: .cghidEventTap)
     up.post(tap: .cghidEventTap)
-    dlog("⌘V etba3at fe3lan")
   }
 
   /// Betban lama el paste yefshal 3ashan el Accessibility mesh mafto7a.
