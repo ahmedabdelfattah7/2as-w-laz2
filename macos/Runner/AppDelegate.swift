@@ -42,6 +42,7 @@ class AppDelegate: FlutterAppDelegate {
       keyCode: UInt32(kVK_ANSI_V),
       modifiers: UInt32(cmdKey | shiftKey)
     ) { [weak self] in
+      dlog("hotkey ⌘⇧V etdas")
       self?.bridge?.togglePanel()
     }
     if hotKey == nil {
