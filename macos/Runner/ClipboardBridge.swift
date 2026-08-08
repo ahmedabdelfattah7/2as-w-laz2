@@ -27,7 +27,7 @@ final class ClipboardBridge {
 
   /// El wa2t elly bnestanah ba3d ma nerga3 el focus lel app el tanya.
   /// Lazem yekoon fih delay 3ashan targee3 el focus mesh bey7sal fawran.
-  private static let pasteDelay: TimeInterval = 0.15
+  private static let pasteDelay: TimeInterval = 0.08
 
   init(messenger: FlutterBinaryMessenger, window: MainFlutterWindow) {
     self.channel = FlutterMethodChannel(
@@ -106,6 +106,9 @@ final class ClipboardBridge {
     // ma el window teban 3ala el shasha.
     setPanelVisible(true)
     window.positionOnActiveScreen()
+    // Ba3d `NSApp.hide` fe amaleyet el paste el app betfdal fe 7alet "hidden",
+    // fa lazem nefokoha el awwil.
+    NSApp.unhide(nil)
     activateSelf()
     window.makeKeyAndOrderFront(nil)
   }
@@ -146,10 +149,13 @@ final class ClipboardBridge {
     //    tani ka 7aga gedida fel history.
     lastChangeCount = pasteboard.changeCount
 
-    // 3) 2fel el panel w rag3a el focus lel app elly kan el user feeha.
+    // 3) 2fel el panel. `NSApp.hide` mesh bas `orderOut`: el orderOut bey5abbi
+    //    el window bas w app-na yefdal howa el active, fa el ⌘V yenzel 3andena
+    //    e7na w el nizam ye3mel beep 3ashan mafeesh 7ad 3ando 7aga yelza2ha.
+    //    El hide howa elly bey-sallem el focus lel app elly wara-na sa7.
     window?.orderOut(nil)
     setPanelVisible(false)
-    _ = previousApp?.activate(options: [])
+    NSApp.hide(nil)
 
     // 4) Man8ir el Accessibility el CGEvent bey-fshal fe sokoot tam, w el user
     //    beyshoof en el app bazet min gher sabab. Fa a7san 7aga ne2oolo.
@@ -161,7 +167,36 @@ final class ClipboardBridge {
       return
     }
 
-    // 5) Ba3d ma el focus yestaqar, ab3at el ⌘V.
+    guard let target = previousApp else {
+      NSLog("copy_paste: mafeesh app ma3roofa nerga3laha — el text 3ala el clipboard bas")
+      return
+    }
+
+    // 5) Estanna le7ad ma el app el tanya teb2a active fe3lan, ba3dein ab3at.
+    _ = target.activate(options: [])
+    waitForFocusThenPaste(target, attempt: 0)
+  }
+
+  /// Delay sabet howa takhmeen: momken yekoon 2osayyar fa el ⌘V yerou7 fel
+  /// hawa, w momken yekoon taweel fa el 7aga tebayyaz bati2a. Fa badal keda
+  /// bene-tabe3 le7ad ma el app el matlouba teb2a heya el active.
+  private func waitForFocusThenPaste(_ target: NSRunningApplication, attempt: Int) {
+    let maxAttempts = 20  // 20 × 50ms = sanya wa7da 3ala el akter
+
+    if !target.isActive && attempt < maxAttempts {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+        self?.waitForFocusThenPaste(target, attempt: attempt + 1)
+      }
+      return
+    }
+
+    let front = NSWorkspace.shared.frontmostApplication?.localizedName ?? "?"
+    NSLog(
+      "copy_paste: ⌘V -> \(target.localizedName ?? "?") | active=\(target.isActive) "
+        + "| frontmost=\(front) | mo7awlat=\(attempt)")
+
+    // Shwayet wa2t kaman ba3d ma yeb2a active, 3ashan el text field gowah
+    // yekoon khad el focus howa kaman.
     DispatchQueue.main.asyncAfter(deadline: .now() + Self.pasteDelay) {
       Self.sendCommandV()
     }
