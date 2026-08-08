@@ -63,6 +63,40 @@ flutter build macos --release
 The result is `build/macos/Build/Products/Release/Clipboard.app`, a universal
 binary for both Apple Silicon and Intel.
 
+### Working on it locally
+
+Use the helper instead, which builds, signs, installs, and relaunches:
+
+```bash
+./tool/install.sh
+```
+
+Signing locally matters more than it looks. With Flutter's default **ad-hoc**
+signature, the requirement macOS stores when you grant Accessibility is the
+binary's hash:
+
+```
+designated => cdhash H"dd7f654f…"
+```
+
+So every rebuild silently invalidates the permission — the switch in System
+Settings still shows as on, but the app is no longer trusted. Signing with any
+real certificate replaces that with a certificate-based requirement containing
+no hash, and the grant then survives every subsequent build.
+
+The script picks the first Developer ID or Apple Development identity in your
+keychain. Override it if you have several:
+
+```bash
+CLIPBOARD_SIGN_IDENTITY="Developer ID Application: …" ./tool/install.sh
+```
+
+If the permission ever does get into a bad state, clear it and start clean:
+
+```bash
+tccutil reset Accessibility com.ahmed.clipboard
+```
+
 ## Releasing
 
 `pubspec.yaml` holds the version. Tag it and CI does the rest:
