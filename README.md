@@ -54,6 +54,55 @@ curl -fL -o /tmp/laze2.dmg https://github.com/ahmedabdelfattah7/2as-w-laz2/relea
 Older versions live on the
 [Releases page](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases).
 
+---
+
+<div dir="rtl" lang="ar">
+
+## طريقة التثبيت بالعربي
+
+**١. نزّل البرنامج**
+
+[اضغط هنا للتحميل](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg)
+
+**٢. افتح الملف واسحب البرنامج على Applications**
+
+هتلاقي اختصار **Applications** جنبه — اسحب عليه.
+
+⚠️ **مهم:** متفتحش البرنامج وهو جوه الـ DMG، لازم تسحبه الأول.
+
+**٣. ماك هيقول إن البرنامج مش موثوق — دي خطوة عادية**
+
+هتظهرلك رسالة *"Apple could not verify..."*. دي بتظهر لأي برنامج مش مدفوع
+عليه اشتراك أبل السنوي، ومالهاش أي علاقة بإن البرنامج فيه مشكلة.
+اعملها مرة واحدة بس على كل جهاز:
+
+- اضغط **Done** — ومتضغطش **Move to Trash** أبداً، دي هتمسح البرنامج.
+- افتح **System Settings** ← **Privacy & Security**.
+- انزل لتحت خالص لحد قسم **Security**، هتلاقي مكتوب إن البرنامج اتمنع.
+- اضغط **Open Anyway** وأكّد.
+
+البديل لو بتحب الترمينال:
+
+```bash
+xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
+```
+
+**٤. اسمحله بصلاحية Accessibility**
+
+عشان يقدر يعمل لصق مكانك. **System Settings** ← **Privacy & Security** ←
+**Accessibility** ← فعّل **2as w Laze2**.
+
+من غير الصلاحية دي البرنامج هيشتغل عادي وهينسخ اللي اخترته، بس مش هيقدر
+يدوس ⌘V بدالك.
+
+**٥. خلاص، جرّبه**
+
+انسخ كام حاجة، دوس **⌘⇧V**، اكتب عشان تدوّر، ودوس **Enter**.
+
+</div>
+
+---
+
 ### 2. Accessibility permission
 
 Auto-paste synthesises a ⌘V keystroke, which macOS only allows with the
