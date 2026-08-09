@@ -36,18 +36,20 @@ curl -fL -o /tmp/laze2.dmg https://github.com/ahmedabdelfattah7/2as-w-laz2/relea
 
 1. **[Download the DMG](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases/latest/download/2as-w-Laze2.dmg)**
    and open it.
-2. Drag **2as w Laze2.app** into your **Applications** folder. *(Don't open it
-   from the DMG — it will be blocked.)*
-3. Remove the quarantine flag, which is what makes macOS trust it:
+2. Drag **2as w Laze2** onto the **Applications** shortcut sitting next to it.
+   *(Never open the app inside the DMG — macOS blocks it there, and the fix
+   can't be applied on a read-only volume.)*
+3. Unblock it, either way works:
+   - **Terminal:**
 
-   ```bash
-   xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
-   ```
+     ```bash
+     xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
+     ```
 
+   - **No Terminal:** open the app from Applications once — macOS blocks it,
+     click **Done**. Then System Settings → **Privacy & Security** → scroll
+     down → **Open Anyway** → confirm. This works on any Mac with no typing.
 4. Open it from Applications.
-
-If you skip step 3, the GUI fallback is System Settings → Privacy & Security →
-**Open Anyway**, after a blocked launch attempt.
 
 Older versions live on the
 [Releases page](https://github.com/ahmedabdelfattah7/2as-w-laz2/releases).

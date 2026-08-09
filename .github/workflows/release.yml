@@ -35,9 +35,16 @@ jobs:
 
       - name: Package as a DMG
         run: |
+          # The DMG carries an /Applications symlink next to the app — the
+          # classic "drag here" layout. Without it people double-click the app
+          # inside the DMG, where Gatekeeper blocks it AND the quarantine fix
+          # cannot be applied (a mounted DMG is read-only).
+          mkdir dmg-staging
+          ditto "build/macos/Build/Products/Release/2as w Laze2.app" "dmg-staging/2as w Laze2.app"
+          ln -s /Applications "dmg-staging/Applications"
           hdiutil create \
             -volname "2as w Laze2" \
-            -srcfolder "build/macos/Build/Products/Release/2as w Laze2.app" \
+            -srcfolder dmg-staging \
             -ov -format UDZO \
             "2as-w-Laze2-${GITHUB_REF_NAME}.dmg"
 
@@ -53,17 +60,20 @@ jobs:
             2as-w-Laze2-*.dmg
             2as-w-Laze2.dmg
           body: |
-            Drag **2as w Laze2.app** into `/Applications`.
+            ## Install
 
-            This build is **not signed or notarized**, so macOS will refuse to
-            open it until you clear the quarantine flag:
-
-            ```
-            xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"
-            ```
-
-            On first launch, grant **Accessibility** in
-            System Settings → Privacy & Security → Accessibility. Without it the
-            app can read your clipboard but cannot paste for you.
+            1. Open the DMG and drag **2as w Laze2** onto the **Applications**
+               shortcut next to it. **Don't open it inside the DMG** — macOS
+               will block it there and the fix can't be applied.
+            2. macOS will say it *"could not verify the app is free of
+               malware"* — expected for an app that isn't notarized by Apple.
+               Unblock it either way:
+               - **Terminal:** `xattr -dr com.apple.quarantine "/Applications/2as w Laze2.app"`
+               - **No Terminal:** open the app once (it gets blocked, click
+                 Done), then System Settings → **Privacy & Security** → scroll
+                 down → **Open Anyway**.
+            3. On first launch, grant **Accessibility** (System Settings →
+               Privacy & Security → Accessibility) — without it the app can
+               read your clipboard but cannot paste for you.
 
             Press **⌘⇧V** to open the panel.
